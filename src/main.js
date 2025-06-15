@@ -1,5 +1,5 @@
-import { fetchImages } from './js/pixabay-api.js';
-import { renderGallery, clearGallery } from './js/render-functions.js';
+import { getImagesByQuery } from './js/pixabay-api.js';
+import { createGallery, clearGallery } from './js/render-functions.js';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
@@ -23,15 +23,19 @@ form.addEventListener('submit', (event) => {
     clearGallery();
     showLoader();
 
-    fetchImages(query)
+
+    getImagesByQuery(query)
         .then(data => {
+            console.log(data);
+            
             if (data.hits.length === 0) {
                 iziToast.error({
                     title: 'No Results',
-                    message: 'Sorry, there are no images matching your search query. Please try again!'
+                    message: 'Sorry, there are no images matching your search query. Please try again!',
+                    position: 'topRight'
                 });
             } else {
-                renderGallery(data.hits);
+                createGallery(data.hits);
             }
         })
         .catch(error => {
